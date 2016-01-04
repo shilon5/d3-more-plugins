@@ -17,7 +17,8 @@
   ],
   "license": "Clarisite",
   "dependencies": {
-    "d3": "^3.4.4"
+    "d3": "^3.4.4",
+    "d3-cloud": "shilon5/d3-cloud#~1.2.1"
   },
   "ignore": [
     "**/.*",
