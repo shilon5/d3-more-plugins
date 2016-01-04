@@ -1,0 +1,39 @@
+{
+  "name": "d3-plugins",
+  "homepage": "http://www.d3js.org",
+  "authors": [
+    "Nir Shilon"
+  ],
+  "description": "Re-usable plugins for d3.",
+  "main": [
+    "build/d3-plugins.js",
+    "build/d3-plugins.css"
+  ],
+  "keywords": [
+    "d3",
+    "visualization",
+    "svg",
+    "charts"
+  ],
+  "license": "Clarisite",
+  "dependencies": {
+    "d3": "^3.4.4"
+  },
+  "ignore": [
+    "**/.*",
+    ".idea",
+    "node_modules",
+    "bower_components",
+    "test",
+    "src",
+    "examples",
+    "GruntFile.js",
+    "package.json",
+    "*.html",
+    "*.log",
+    "*.xml",
+    "*.iml",
+    "*.json",
+    "*.md"
+  ]
+}
