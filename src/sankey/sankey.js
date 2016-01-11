@@ -51,6 +51,12 @@
             return sankey;
         };
 
+        sankey.relayoutWithNodes = function (node) {
+            computeNodeDepths(1);
+            computeLinkDepths();
+            return sankey;
+        };
+
         sankey.link = function () {
             var curvature = .5;
 
@@ -101,6 +107,8 @@
                     d3.sum(node.sourceLinks, value),
                     d3.sum(node.targetLinks, value)
                 );
+
+                node.ratio = Math.round((100.0* (d3.sum(node.sourceLinks, value) - d3.sum(node.targetLinks, value))) / node.value);
             });
         }
 
@@ -240,6 +248,9 @@
                         dy = y0 - node.y;
                         if (dy > 0) node.y += dy;
                         y0 = node.y + node.dy + nodePadding;
+
+                        node.y = Math.round(node.y);
+                        node.dy = Math.round(node.dy);
                     }
 
                     // If the bottommost node goes outside the bounds, push it back up.
