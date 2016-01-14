@@ -61,13 +61,13 @@
             var curvature = .5;
 
             function link(d) {
-                var x0 = d.source.x + d.source.dx,
-                    x1 = d.target.x,
+                var x0 = d.sourceNode.x + d.sourceNode.dx,
+                    x1 = d.targetNode.x,
                     xi = d3.interpolateNumber(x0, x1),
                     x2 = xi(curvature),
                     x3 = xi(1 - curvature),
-                    y0 = d.source.y + d.sy + d.dy / 2,
-                    y1 = d.target.y + d.ty + d.dy / 2;
+                    y0 = d.sourceNode.y + d.sy + d.dy / 2,
+                    y1 = d.targetNode.y + d.ty + d.dy / 2;
                 return "M" + x0 + "," + y0
                     + "C" + x2 + "," + y0
                     + " " + x3 + "," + y1
@@ -91,12 +91,11 @@
                 node.targetLinks = [];
             });
             links.forEach(function (link) {
-                var source = link.source,
-                    target = link.target;
-                if (typeof source === "number") source = link.source = nodes[link.source];
-                if (typeof target === "number") target = link.target = nodes[link.target];
-                source.sourceLinks.push(link);
-                target.targetLinks.push(link);
+                var sourceNode = link.sourceNode = nodes[link.source],
+                    targetNode = link.targetNode = nodes[link.target];
+
+                sourceNode.sourceLinks.push(link);
+                targetNode.targetLinks.push(link);
             });
         }
 
@@ -108,7 +107,8 @@
                     d3.sum(node.targetLinks, value)
                 );
 
-                node.ratio = Math.round((100.0* (d3.sum(node.sourceLinks, value) - d3.sum(node.targetLinks, value))) / node.value);
+                // compute the ratio of outgoing flow and node's value
+                node.ratio = Math.round(100 * d3.sum(node.sourceLinks, value) / node.value);
             });
         }
 
@@ -127,8 +127,8 @@
                     node.x = x;
                     node.dx = nodeWidth;
                     node.sourceLinks.forEach(function (link) {
-                        if (nextNodes.indexOf(link.target) < 0) {
-                            nextNodes.push(link.target);
+                        if (nextNodes.indexOf(link.targetNode) < 0) {
+                            nextNodes.push(link.targetNode);
                         }
                     });
                 });
@@ -145,7 +145,7 @@
             nodes.forEach(function (node) {
                 if (!node.targetLinks.length) {
                     node.x = d3.min(node.sourceLinks, function (d) {
-                            return d.target.x;
+                            return d.targetNode.x;
                         }) - 1;
                 }
             });
@@ -214,7 +214,7 @@
                 });
 
                 function weightedSource(link) {
-                    return center(link.source) * link.value;
+                    return center(link.sourceNode) * link.value;
                 }
             }
 
@@ -229,7 +229,7 @@
                 });
 
                 function weightedTarget(link) {
-                    return center(link.target) * link.value;
+                    return center(link.targetNode) * link.value;
                 }
             }
 
@@ -292,11 +292,11 @@
             });
 
             function ascendingSourceDepth(a, b) {
-                return a.source.y - b.source.y;
+                return a.sourceNode.y - b.sourceNode.y;
             }
 
             function ascendingTargetDepth(a, b) {
-                return a.target.y - b.target.y;
+                return a.targetNode.y - b.targetNode.y;
             }
         }
 
