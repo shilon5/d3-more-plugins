@@ -94,8 +94,8 @@
                 var sourceNode = link.sourceNode = nodes[link.source],
                     targetNode = link.targetNode = nodes[link.target];
 
-                sourceNode.sourceLinks.push(link);
-                targetNode.targetLinks.push(link);
+                sourceNode && sourceNode.sourceLinks.push(link);
+                targetNode && targetNode.targetLinks.push(link);
             });
         }
 
